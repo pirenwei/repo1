@@ -1,5 +1,5 @@
 import streamlit as st
-import openai
+//import openai
 
 
 # 设置OpenAI API密钥
