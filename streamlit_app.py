@@ -1,12 +1,14 @@
 import streamlit as st
 import openai
+import os
 
 
 # 设置OpenAI API密钥
 openai.api_key = 'org-8wkSnxtGzsh06oUcf8H7zKPP'
 
 
-def generate_cover_letter(user_profile, job_description, summary_length, tone):
+@st.cache(allow_output_mutation=True)
+def get_openai_response(user_profile, job_description, summary_length, tone):
     # 根据所选的语气选择相应的模型ID
     if tone == '正式':
         model_id = 'gpt-3.5-turbo'
@@ -22,7 +24,7 @@ def generate_cover_letter(user_profile, job_description, summary_length, tone):
         prompt=prompt,
         max_tokens=summary_length,
         temperature=0.5,
-        n = 1
+        n=1
     )
 
     return response.choices[0].text.strip()
@@ -48,7 +50,7 @@ def main():
 
     # 生成求职信
     if st.button("生成求职信"):
-        cover_letter = generate_cover_letter(user_profile, job_description, summary_length, tone)
+        cover_letter = get_openai_response(user_profile, job_description, summary_length, tone)
         st.success("求职信已生成！")
         st.text_area("生成的求职信", value=cover_letter, height=400)
         if st.button("保存求职信"):
@@ -58,4 +60,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
